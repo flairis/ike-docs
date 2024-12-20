@@ -179,7 +179,10 @@ def _download_starter_code(path: str):
         raise typer.Exit(1)
 
 
-def _get_node_root(project_root: str) -> str:
+def _get_node_root(project_root: str = None) -> str:
+    if not project_root:
+       project_root = _get_project_root()
+       
     return os.path.join(project_root, ".ike")
 
 
@@ -238,8 +241,7 @@ def deploy():
         api_key = typer.prompt("Enter API key", hide_input=True)
         keyring.set_password('ike', 'api_key', api_key)
 
-    project_root = _get_project_root()
-    node_root = _get_node_root(project_root)
+    node_root = _get_node_root()
     build_path = os.path.join(node_root, "build.zip")
     _build_project(node_root, build_path)
 
