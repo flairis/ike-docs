@@ -243,11 +243,13 @@ def deploy():
     build_path = os.path.join(node_root, "build.zip")
     
     _build_project(node_root, build_path)
-    _submit_deployment(api_key, build_path)
+    deployment_id = _queue_deployment(api_key, build_path)
 
     # Clean up build artifact
     if os.path.exists(build_path):
         os.remove(build_path)
+
+    _monitor_deployment(api_key, deployment_id)
 
     
 def _build_project(node_root: str, build_path: str):
@@ -266,7 +268,7 @@ def _build_project(node_root: str, build_path: str):
                     zipf.write(file_path, rel_path)
 
 
-def _submit_deployment(api_key: str, build_path: str) -> str:
+def _queue_deployment(api_key: str, build_path: str) -> str:
     logger.info("Queueing deployment...")
 
     with open(build_path, "rb") as file:
@@ -279,12 +281,42 @@ def _submit_deployment(api_key: str, build_path: str) -> str:
         )
 
     if response.status_code == 202:
-        url = json.loads(response.text)["body"]
-        logger.info(f"Deployment queued, will be available at {url}")
+        body = json.loads(response.json()["body"])
+        return body["deploymentId"]
     else:
         logger.info(f"Deployment failed: {response.status_code} {response.text}")
         raise typer.Exit(1)
-    
+
+
+def _monitor_deployment(api_key: str, deployment_id: str):
+    logger.info("Monitoring deployment...")
+
+    url = f"https://yron03hrwk.execute-api.us-east-1.amazonaws.com/dev/docs/build/{deployment_id}"
+    headers = {
+        "x-api-key": api_key
+    }
+    timeout = time.time() + (15 * 60)
+
+    while time.time() < timeout:
+        try:
+            response = requests.get(url, headers=headers)
+            body = response.json()
+            status = body["status"]
+
+            if status == "READY":
+                logger.info(f"Deployment successful! {body["deploymentUrl"]}")
+                return
+            elif status == "ERROR":
+                logger.info(f"Deployment failed: {body["error_message"]}")
+                return
+
+            time.sleep(10)
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Error while checking deployment status: {e}")
+            return
+
+    logger.warn("Timed out while monitoring deployment.")
+
 
 def main():
     app()
