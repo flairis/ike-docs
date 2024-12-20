@@ -241,14 +241,9 @@ def deploy():
     project_root = _get_project_root()
     node_root = _get_node_root(project_root)
     build_path = os.path.join(node_root, "build.zip")
-    
     _build_project(node_root, build_path)
+
     deployment_id = _queue_deployment(api_key, build_path)
-
-    # Clean up build artifact
-    if os.path.exists(build_path):
-        os.remove(build_path)
-
     _monitor_deployment(api_key, deployment_id)
 
     
@@ -279,6 +274,9 @@ def _queue_deployment(api_key: str, build_path: str) -> str:
             }, 
             data=file
         )
+
+    # Clean up build artifact
+    os.remove(build_path)
 
     if response.status_code == 202:
         body = json.loads(response.json()["body"])
