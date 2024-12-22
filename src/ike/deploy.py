@@ -63,16 +63,16 @@ def deploy_project(node_root: str, package_name: str) -> str:
 
     if response.status_code == 202:
         body = response.json()
-        _monitor_deployment(body["deploymentId"])
+        _monitor_deployment(body["deploymentId"], package_name)
     else:
         logger.info(f"Deployment failed: {response.status_code} {response.text}")
         raise typer.Exit(1)
 
 
-def _monitor_deployment(deployment_id: str):
+def _monitor_deployment(deployment_id: str, package_name: str):
     logger.info("Monitoring deployment...")
 
-    url = f"https://yron03hrwk.execute-api.us-east-1.amazonaws.com/dev/deployments/{deployment_id}"
+    url = f"https://yron03hrwk.execute-api.us-east-1.amazonaws.com/dev/packages/{package_name}/deployments/{deployment_id}"
     headers = {
         "x-api-key": _get_api_key()
     }
