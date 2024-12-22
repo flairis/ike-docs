@@ -72,7 +72,7 @@ def deploy_project(node_root: str, package_name: str) -> str:
 def _monitor_deployment(deployment_id: str, package_name: str):
     logger.info("Monitoring deployment...")
 
-    url = f"https://yron03hrwk.execute-api.us-east-1.amazonaws.com/dev/packages/{package_name}/deployments/{deployment_id}"
+    url = f"https://yron03hrwk.execute-api.us-east-1.amazonaws.com/status/packages/{package_name}/deployments/{deployment_id}"
     headers = {
         "x-api-key": _get_api_key()
     }
