@@ -14,9 +14,11 @@ from watchdog.events import FileSystemEventHandler
 from pathlib import Path
 import requests
 import typer
-from rich.prompt import Prompt
-from rich.status import Status
-from ike.extract import extract_definitions, write_definition
+
+from .bootstrap import download_starter_code
+from .link import link_config_file, link_existing_pages, link_page_on_creation
+from .node import install_node_modules, is_node_installed, run_node_dev
+from .parser import prepare_references
 
 app = typer.Typer()
 logger = logging.getLogger(__name__)
@@ -24,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 @app.command()
 def init():
-    if not _is_node_installed():
+    if not is_node_installed():
         logger.error(
             "Ike depends on Node.js. Make sure it's installed in the current "
             "environment and available in the PATH."
@@ -200,37 +202,11 @@ def _get_project_root():
 def dev():
     project_root = _get_project_root()
 
-    try:
-        # TODO: Load package name from ike.yaml
-        package = importlib.import_module("rich")
-    except ImportError:
-        # TODO: Raise helpful error.
-        raise
-
-    node_root = _get_node_root(project_root)
-    for definition in extract_definitions(package):
-        write_definition(definition, os.path.join(node_root, "public", "api"))
-
-    node_root = _get_node_root(project_root)
-    _watch_for_new_pages(project_root)
-    try:
-        # Run `npm run dev` in the project directory
-        logger.info("Starting development server at http://localhost:3000")
-        subprocess.run(
-            ["npm", "run", "dev"],
-            check=True,
-            capture_output=True,
-            text=True,
-            cwd=node_root
-        )
-    except subprocess.CalledProcessError as e:
-        if "Could not read package.json" in e.stderr:
-            raise typer.Exit(1)
-    except FileNotFoundError:
-        logger.error("npm is not installed or not in PATH. Please install Node.js.")
-        raise typer.Exit(1)
-    except KeyboardInterrupt:
-        logger.info("Development server stopped.")
+    prepare_references(project_root)
+    link_config_file(project_root)
+    link_existing_pages(project_root)
+    link_page_on_creation(project_root)
+    run_node_dev(project_root)
 
 
 @app.command()
