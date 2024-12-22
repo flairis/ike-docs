@@ -16,7 +16,7 @@ def get_project_root():
     return project_root
 
 
-def get_project_name() -> str:
+def get_package_name() -> str:
     config_path = os.path.join(get_project_root(), "ike.yaml")
 
     with open(config_path) as file:

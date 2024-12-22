@@ -10,7 +10,7 @@ from .deploy import build_project, deploy_project
 from .link import link_config_file, link_existing_pages, link_page_on_creation
 from .node import get_node_root, install_node_modules, is_node_installed, run_node_dev
 from .parser import prepare_references
-from .utils import get_project_name, get_project_root
+from .utils import get_package_name, get_project_root
 
 app = typer.Typer()
 logger = logging.getLogger(__name__)
@@ -57,10 +57,10 @@ def dev():
 @app.command()
 def deploy():
     node_root = get_node_root(get_project_root())
-    project_name = get_project_name()
+    package_name = get_package_name()
 
     build_project(node_root)
-    deploy_project(node_root, project_name)
+    deploy_project(node_root, package_name)
 
 
 def main():

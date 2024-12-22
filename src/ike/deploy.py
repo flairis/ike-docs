@@ -44,13 +44,13 @@ def build_project(node_root: str):
                     zipf.write(file_path, rel_path)
 
 
-def deploy_project(node_root: str, project_name: str) -> str:
+def deploy_project(node_root: str, package_name: str) -> str:
     logger.info("Queueing deployment...")
 
     build_path = _get_build_path(node_root)
 
     with open(build_path, "rb") as file:
-        response = requests.post(f"https://yron03hrwk.execute-api.us-east-1.amazonaws.com/dev/projects/{project_name}", 
+        response = requests.post(f"https://yron03hrwk.execute-api.us-east-1.amazonaws.com/dev/packages/{package_name}", 
             headers={
                 "x-api-key": _get_api_key(),
                 "Content-Type": "application/zip"
