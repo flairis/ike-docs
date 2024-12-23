@@ -44,7 +44,7 @@ def build_project(node_root: str):
                     zipf.write(file_path, rel_path)
 
 
-def deploy_project(node_root: str, package_name: str) -> str:
+def deploy_project(node_root: str, package_name: str):
     logger.info("Queueing deployment...")
 
     build_path = _get_build_path(node_root)
