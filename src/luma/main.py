@@ -4,6 +4,7 @@ import logging
 import os
 import shutil
 import typer
+import yaml
 
 from .bootstrap import download_starter_code
 from .deploy import build_project, cleanup_build, deploy_project, monitor_deployment
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 def init():
     if not is_node_installed():
         logger.error(
-            "Ike depends on Node.js. Make sure it's installed in the current "
+            "Luma depends on Node.js. Make sure it's installed in the current "
             "environment and available in the PATH."
         )
         raise typer.Exit(1)
@@ -31,16 +32,27 @@ def init():
         importlib.import_module(package_name)
     except ImportError:
         logger.error(
-            f"Ike couldn't import a package named '{package_name}'. Make sure it's "
+            f"Luma couldn't import a package named '{package_name}'. Make sure it's "
             "installed in the current environment."
         )
         raise typer.Exit(1)
 
     project_root = os.path.join(os.getcwd(), "docs/")
     download_starter_code(project_root)
+    _insert_package_name_in_config(project_root, package_name)
     install_node_modules(project_root)
     link_config_file(project_root)
     link_existing_pages(project_root)
+
+
+def _insert_package_name_in_config(project_root: str, package_name: str):
+    # TODO: Refactor. This code is garbage.
+    config_path = os.path.join(project_root, "luma.yaml")
+    with open(config_path, "r") as file:
+        config = yaml.safe_load(file)
+    config = {"name": package_name, **config}
+    with open(config_path, "w") as file:
+        yaml.dump(config, file, default_flow_style=False)
 
 
 @app.command()
