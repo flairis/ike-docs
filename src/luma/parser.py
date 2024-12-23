@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 def prepare_references(project_root: str) -> None:
     try:
-        # TODO: Load package name from ike.yaml
-        package = importlib.import_module("ike")
+        # TODO: Load package name from luma.yaml
+        package = importlib.import_module("luma")
     except ImportError:
         # TODO: Raise helpful error.
         raise

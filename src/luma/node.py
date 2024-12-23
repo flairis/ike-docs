@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_node_root(project_root: str) -> str:
-    return os.path.join(project_root, ".ike")
+    return os.path.join(project_root, ".luma")
 
 
 def is_node_installed() -> bool:

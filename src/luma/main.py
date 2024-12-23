@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 def init():
     if not is_node_installed():
         logger.error(
-            "Ike depends on Node.js. Make sure it's installed in the current "
+            "Luma depends on Node.js. Make sure it's installed in the current "
             "environment and available in the PATH."
         )
         raise typer.Exit(1)
@@ -34,7 +34,7 @@ def init():
         importlib.import_module(package_name)
     except ImportError:
         logger.error(
-            f"Ike couldn't import a package named '{package_name}'. Make sure it's "
+            f"Luma couldn't import a package named '{package_name}'. Make sure it's "
             "installed in the current environment."
         )
         raise typer.Exit(1)
@@ -50,14 +50,14 @@ def _get_node_root(project_root: str = None) -> str:
     if not project_root:
        project_root = _get_project_root()
        
-    return os.path.join(project_root, ".ike")
+    return os.path.join(project_root, ".luma")
 
 
 def _get_project_root():
     project_root = os.getcwd() 
 
-    if not os.path.exists(os.path.join(project_root, "ike.yaml")): 
-        logger.error("The current directory isn't a valid Ike project.") 
+    if not os.path.exists(os.path.join(project_root, "luma.yaml")): 
+        logger.error("The current directory isn't a valid Luma project.") 
         raise typer.Exit(1) 
 
     return project_root
@@ -76,11 +76,11 @@ def dev():
 
 @app.command()
 def deploy():
-    api_key = keyring.get_password('ike', 'api_key')
+    api_key = keyring.get_password('luma', 'api_key')
 
     if not api_key:
         api_key = typer.prompt("Enter API key", hide_input=True)
-        keyring.set_password('ike', 'api_key', api_key)
+        keyring.set_password('luma', 'api_key', api_key)
 
     node_root = _get_node_root()
     build_path = os.path.join(node_root, "build.zip")
