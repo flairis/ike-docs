@@ -6,7 +6,7 @@ import shutil
 import typer
 
 from .bootstrap import download_starter_code
-from .deploy import build_project, deploy_project
+from .deploy import build_project, cleanup_build, deploy_project, monitor_deployment
 from .link import link_config_file, link_existing_pages, link_page_on_creation
 from .node import get_node_root, install_node_modules, is_node_installed, run_node_dev
 from .parser import prepare_references
@@ -59,8 +59,12 @@ def deploy():
     node_root = get_node_root(get_project_root())
     package_name = get_package_name()
 
-    build_project(node_root)
-    deploy_project(node_root, package_name)
+    try:
+        build_path = build_project(node_root)
+        deployment_id = deploy_project(build_path, package_name)
+        monitor_deployment(deployment_id, package_name)
+    finally:
+        cleanup_build(build_path)
 
 
 def main():
