@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "luma"
-version = "0.1.0"
+name = "luma-docs"
+version = "0.0.5"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["The Luma Team <spam@ham.com>"]
 readme = "README.md"
 packages = [{ include = "luma", from = "src" }]
 license = "AGPL-3.0-only"
@@ -11,7 +11,7 @@ license = "AGPL-3.0-only"
 luma = "luma.main:main"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.9"
 typer = "^0.13.1"
 requests = "^2.32.3"
 rich = "^13.9.4"
