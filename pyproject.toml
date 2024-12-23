@@ -5,6 +5,7 @@ description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 packages = [{ include = "luma", from = "src" }]
+license = "AGPL-3.0-only"
 
 [tool.poetry.scripts]
 luma = "luma.main:main"
