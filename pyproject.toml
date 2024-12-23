@@ -19,6 +19,7 @@ keyring = "^25.5.0"
 pathspec = "^0.12.1"
 pydantic = "^2.10.3"
 docstring-parser = "^0.16"
+pyyaml = "^6.0.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.8.0"

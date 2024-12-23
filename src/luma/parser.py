@@ -6,6 +6,7 @@ import os
 import pkgutil
 from types import FunctionType, ModuleType
 from typing import Iterable
+import yaml
 
 from docstring_parser import parse
 
@@ -15,10 +16,19 @@ from .node import get_node_root
 logger = logging.getLogger(__name__)
 
 
+# TODO: Merge with https://github.com/luma-docs/luma/pull/2. 
+def get_package_name(project_root: str) -> str:
+    config_path = os.path.join(project_root, "luma.yaml")
+
+    with open(config_path) as file:
+        data = yaml.safe_load(file)
+        return data["name"]
+
+
 def prepare_references(project_root: str) -> None:
+    package_name = get_package_name(project_root)
     try:
-        # TODO: Load package name from luma.yaml
-        package = importlib.import_module("luma")
+        package = importlib.import_module(package_name)
     except ImportError:
         # TODO: Raise helpful error.
         raise
