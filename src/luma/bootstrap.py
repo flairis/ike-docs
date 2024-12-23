@@ -10,8 +10,8 @@ logger = logging.getLogger(__name__)
 
 def download_starter_code(path: str):
     logger.info(f"Initializing project directory to '{path}'.")
-    repo_owner = "flairis"
-    repo_name = "ike-docs"
+    repo_owner = "luma-docs"
+    repo_name = "luma"
     subdirectory_path = f"{repo_name}-main/starter/"
 
     # URL to download the repository as a ZIP file

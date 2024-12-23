@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 
 def link_config_file(project_root: str):
-    src = os.path.join(project_root, "ike.yaml")
-    dst = os.path.join(get_node_root(project_root), "public", "ike.yaml")
+    src = os.path.join(project_root, "luma.yaml")
+    dst = os.path.join(get_node_root(project_root), "public", "luma.yaml")
 
     if os.path.exists(dst):
         logger.warning(f"Overwriting old copy of config '{src}'.")
@@ -30,7 +30,7 @@ def link_existing_pages(project_root: str):
 
             file_path = os.path.join(dir_path, filename)
             relative_path = os.path.relpath(file_path, project_root)
-            if relative_path.startswith(".ike"):
+            if relative_path.startswith(".luma"):
                 continue
 
             _link_page(project_root, relative_path)
@@ -63,7 +63,7 @@ class _FileLinker(FileSystemEventHandler):
     def on_created(self, event):
         if not event.is_directory:
             relative_path = Path(event.src_path).relative_to(self._project_root)
-            if str(relative_path).startswith(".ike") or not str(relative_path).endswith(
+            if str(relative_path).startswith(".luma") or not str(relative_path).endswith(
                 ".md"
             ):
                 return

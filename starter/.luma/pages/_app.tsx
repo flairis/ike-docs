@@ -70,7 +70,7 @@ export default function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
 
   useEffect(() => {
     const fetchConfig = async () => {
-      const res = await fetch('/ike.yaml');
+      const res = await fetch('/luma.yaml');
       const text = await res.text();
       const data = yaml.load(text) as Config;
       setConfig(data);
