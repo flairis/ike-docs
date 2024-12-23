@@ -9,6 +9,7 @@ import zipfile
 import time
 import requests
 import typer
+import yaml
 
 from .bootstrap import download_starter_code
 from .link import link_config_file, link_existing_pages, link_page_on_creation
@@ -41,11 +42,22 @@ def init():
 
     project_root = os.path.join(os.getcwd(), "docs/")
     download_starter_code(project_root)
+    _insert_package_name_in_config(project_root, package_name)
     install_node_modules(project_root)
     link_config_file(project_root)
     link_existing_pages(project_root)
 
 
+def _insert_package_name_in_config(project_root: str, package_name: str):
+    # TODO: Refactor. This code is garbage.
+    config_path = os.path.join(project_root, "luma.yaml")
+    with open(config_path, "r") as file:
+        config = yaml.safe_load(file)
+    config = {"name": package_name, **config}
+    with open(config_path, "w") as file:
+        yaml.dump(config, file, default_flow_style=False)
+        
+    
 def _get_node_root(project_root: str = None) -> str:
     if not project_root:
        project_root = _get_project_root()
