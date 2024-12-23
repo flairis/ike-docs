@@ -9,6 +9,9 @@ import typer
 import yaml
 import zipfile
 
+POLLING_TIMEOUT_SECONDS = 15 * 60
+POLLING_INTERVAL_SECONDS = 10
+
 logger = logging.getLogger(__name__)
 
 
@@ -76,7 +79,7 @@ def _monitor_deployment(deployment_id: str, package_name: str):
     headers = {
         "x-api-key": _get_api_key()
     }
-    timeout = time.time() + (15 * 60)
+    timeout = time.time() + POLLING_TIMEOUT_SECONDS
 
     while time.time() < timeout:
         try:
@@ -91,7 +94,7 @@ def _monitor_deployment(deployment_id: str, package_name: str):
                 logger.info(f"Deployment failed: {body["error_message"]}")
                 return
 
-            time.sleep(10)
+            time.sleep(POLLING_INTERVAL_SECONDS)
         except requests.exceptions.RequestException as e:
             logger.error(f"Error while checking deployment status: {e}")
             return
