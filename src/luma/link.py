@@ -63,8 +63,8 @@ class _FileLinker(FileSystemEventHandler):
     def on_created(self, event):
         if not event.is_directory:
             relative_path = Path(event.src_path).relative_to(self._project_root)
-            if str(relative_path).startswith(".luma") or not str(relative_path).endswith(
-                ".md"
-            ):
+            if str(relative_path).startswith(".luma") or not str(
+                relative_path
+            ).endswith(".md"):
                 return
             _link_page(self._project_root, relative_path)

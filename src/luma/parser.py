@@ -16,7 +16,7 @@ from .node import get_node_root
 logger = logging.getLogger(__name__)
 
 
-# TODO: Merge with https://github.com/luma-docs/luma/pull/2. 
+# TODO: Merge with https://github.com/luma-docs/luma/pull/2.
 def get_package_name(project_root: str) -> str:
     config_path = os.path.join(project_root, "luma.yaml")
 

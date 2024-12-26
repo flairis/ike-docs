@@ -5,8 +5,12 @@ import os
 import shutil
 import typer
 import yaml
+from typing import Optional
 
-from .bootstrap import download_starter_code
+import typer
+from typing_extensions import Annotated
+
+from .bootstrap import download_starter_files, download_node_code
 from .deploy import build_project, cleanup_build, deploy_project, monitor_deployment
 from .link import link_config_file, link_existing_pages, link_page_on_creation
 from .node import get_node_root, install_node_modules, is_node_installed, run_node_dev
@@ -38,7 +42,11 @@ def init():
         raise typer.Exit(1)
 
     project_root = os.path.join(os.getcwd(), "docs/")
-    download_starter_code(project_root)
+
+    logger.info(f"Initializing project directory to '{project_root}'.")
+    download_starter_files(project_root)
+    download_node_code(get_node_root(project_root))
+
     _insert_package_name_in_config(project_root, package_name)
     install_node_modules(project_root)
     link_config_file(project_root)
@@ -55,15 +63,15 @@ def _insert_package_name_in_config(project_root: str, package_name: str):
         yaml.dump(config, file, default_flow_style=False)
 
 
-@app.command()
-def dev():
-    project_root = get_project_root()
 
+@app.command()
+def dev(port: Annotated[Optional[int], typer.Option()] = None):
+    project_root = get_project_root()
     prepare_references(project_root)
     link_config_file(project_root)
     link_existing_pages(project_root)
     link_page_on_creation(project_root)
-    run_node_dev(project_root)
+    run_node_dev(project_root, port)
 
 
 @app.command()

@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+from typing import Optional
 
 from rich.status import Status
 
@@ -47,13 +48,22 @@ def install_node_modules(project_root: str):
         raise
 
 
-def run_node_dev(project_root: str):
+def run_node_dev(project_root: str, port: Optional[int]):
     node_root = get_node_root(project_root)
+
+    if port is None:
+        port = 3000
+
     try:
-        # TODO: Use the actual port instead of hardcoding it.
-        logger.info("Starting development server at http://localhost:3000")
+        # TODO: Handle situation where port 3000 is already in-use.
+        logger.info(f"Starting development server at http://localhost:{port}")
+
+        command = ["npm", "run", "dev"]
+        if port is not None:
+            command.extend(["--", "--port", f"{port}"])
+
         subprocess.run(
-            ["npm", "run", "dev"],
+            command,
             check=True,
             capture_output=True,
             text=True,
