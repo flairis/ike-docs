@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 def setup_logger(level: int) -> None:
-    print("Default log level is", DEFAULT_LOG_LEVEL)
     # Taken from https://github.com/fastapi/fastapi-cli/blob/main/src/fastapi_cli/logging.py#L8
     rich_handler = RichHandler(
         show_time=False,
