@@ -6,8 +6,8 @@ import os
 import pkgutil
 from types import FunctionType, ModuleType
 from typing import Iterable
-import yaml
 
+import yaml
 from docstring_parser import parse
 
 from .models import DocstringExample, PyArg, PyFunc, PyObj

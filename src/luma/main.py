@@ -1,16 +1,13 @@
 import importlib
-import json
 import logging
 import os
-import shutil
-import typer
-import yaml
 from typing import Optional
 
 import typer
+import yaml
 from typing_extensions import Annotated
 
-from .bootstrap import download_starter_files, download_node_code
+from .bootstrap import download_node_code, download_starter_files
 from .deploy import build_project, cleanup_build, deploy_project, monitor_deployment
 from .link import link_config_file, link_existing_pages, link_page_on_creation
 from .node import get_node_root, install_node_modules, is_node_installed, run_node_dev
@@ -61,7 +58,6 @@ def _insert_package_name_in_config(project_root: str, package_name: str):
     config = {"name": package_name, **config}
     with open(config_path, "w") as file:
         yaml.dump(config, file, default_flow_style=False)
-
 
 
 @app.command()
