@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 
-import { SideNav, TableOfContents, TopNav } from '../components';
+import { SideNav, TableOfContents } from '../components';
 
 import 'prismjs';
 // Import other Prism themes here
@@ -106,9 +106,6 @@ export default function MyApp({ Component, pageProps }: AppProps<MyAppProps>) {
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <TopNav>
-        <Link href="/docs">Docs</Link>
-      </TopNav>
       <div className="page">
         <SideNav items={config?.sidebar || []} />
         <main className="flex column">
