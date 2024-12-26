@@ -42,7 +42,7 @@ def test_init(tmp_cwd):
     with open("docs/luma.yaml") as file:
         config = yaml.safe_load(file)
 
-    assert config["name"] == "test"
+    assert config["name"] == "math"
 
 
 def run_dev(port: int):
@@ -58,8 +58,8 @@ def test_dev(tmp_cwd, unused_port):
 
     process = multiprocessing.Process(target=run_dev, args=(unused_port,), daemon=True)
     process.start()
-
     time.sleep(3)
+
     response = requests.get(f"http://localhost:{unused_port}")
     assert response.status_code == 404
     response = requests.get(f"http://localhost:{unused_port}/getting-started")
