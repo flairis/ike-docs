@@ -1,6 +1,6 @@
-import io
 import logging
 import os
+import platform
 import zipfile
 
 import platform
