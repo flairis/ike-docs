@@ -1,11 +1,15 @@
 import logging
+import os
 
 from rich.logging import RichHandler
+
+DEFAULT_LOG_LEVEL = int(os.getenv("LUMA_LOG_LEVEL", logging.INFO))
 
 logger = logging.getLogger(__name__)
 
 
-def setup_logger(level: int = logging.DEBUG) -> None:
+def setup_logger(level: int) -> None:
+    print("Default log level is", DEFAULT_LOG_LEVEL)
     # Taken from https://github.com/fastapi/fastapi-cli/blob/main/src/fastapi_cli/logging.py#L8
     rich_handler = RichHandler(
         show_time=False,
@@ -20,4 +24,4 @@ def setup_logger(level: int = logging.DEBUG) -> None:
     logger.setLevel(level)
 
 
-setup_logger()
+setup_logger(DEFAULT_LOG_LEVEL)
