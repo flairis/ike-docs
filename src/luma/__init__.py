@@ -18,7 +18,6 @@ def setup_logger(level: int = logging.DEBUG) -> None:
     logger.addHandler(rich_handler)
 
     logger.setLevel(level)
-    # logger.propagate = False
 
 
 setup_logger()
